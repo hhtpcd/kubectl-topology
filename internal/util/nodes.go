@@ -15,6 +15,8 @@
 package util
 
 import (
+	"context"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -24,7 +26,7 @@ func ListNodes(kubeClient kubernetes.Interface, o *TopologyOptions) (NodeList, e
 		TopologyLabelPrefix,
 		Pre117TopologyLabelPrefix,
 	} {
-		n, err := kubeClient.CoreV1().Nodes().List(metav1.ListOptions{
+		n, err := kubeClient.CoreV1().Nodes().List(context.Background(), metav1.ListOptions{
 			LabelSelector: o.GetLabelSelector(p),
 		})
 		if err != nil {

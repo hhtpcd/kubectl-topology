@@ -15,6 +15,8 @@
 package util
 
 import (
+	"context"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -26,7 +28,7 @@ func ListPods(kubeClient kubernetes.Interface, o *TopologyOptions) (PodList, err
 	}
 	r := make(PodList, 0)
 	for _, nn := range n {
-		p, err := kubeClient.CoreV1().Pods(o.Namespace).List(metav1.ListOptions{
+		p, err := kubeClient.CoreV1().Pods(o.Namespace).List(context.Background(), metav1.ListOptions{
 			FieldSelector: "spec.nodeName=" + nn.Name,
 		})
 		if err != nil {
